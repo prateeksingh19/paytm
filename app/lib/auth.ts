@@ -1,17 +1,10 @@
-import CredentialsProvider from "next-auth/providers/credentials";
+import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
-import prisma from "@/db";
-import { Account, User, NextAuthOptions } from "next-auth";
-import { JWT } from "next-auth/jwt";
+import prisma from "@/index";
 
-interface CustomUser extends User {
-  id: string;
-  number: bigint;
-  password: string;
-}
-
-export const authOptions: NextAuthOptions = {
+export const authOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID || "",
@@ -27,7 +20,9 @@ export const authOptions: NextAuthOptions = {
         },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials) {
+      // TODO: User credentials type from next-aut
+      async authorize(credentials: any) {
+        // Do zod validation, OTP validation here
         if (!credentials?.number || !credentials?.password) {
           throw new Error("Missing credentials");
         }
@@ -50,7 +45,7 @@ export const authOptions: NextAuthOptions = {
               name: existingUser.name || "",
               number: existingUser.number,
               password: existingUser.password,
-            } as CustomUser;
+            };
           } else {
             throw new Error("Invalid password");
           }
@@ -71,7 +66,7 @@ export const authOptions: NextAuthOptions = {
             name: user.name || "",
             number: user.number,
             password: user.password,
-          } as CustomUser;
+          };
         } catch (e) {
           console.error(e);
           throw new Error("User creation failed");
@@ -81,7 +76,20 @@ export const authOptions: NextAuthOptions = {
   ],
   secret: process.env.JWT_SECRET,
   callbacks: {
-    async signIn({ user, account }) {
+    // TODO: can u fix the type here? Using any is bad
+    async session({ session, token }: any) {
+      if (session?.user) {
+        session.user.id = token.sub!;
+      }
+      return session;
+    },
+    async jwt({ token, user }: any) {
+      if (user) {
+        token.sub = user.id;
+      }
+      return token;
+    },
+    async signIn({ user, account }: any) {
       if (!user) {
         return false;
       }
@@ -100,18 +108,6 @@ export const authOptions: NextAuthOptions = {
       }
 
       return true;
-    },
-    async session({ session, token }: any) {
-      if (session?.user) {
-        session.user.id = token.sub!;
-      }
-      return session;
-    },
-    async jwt({ token, user }) {
-      if (user) {
-        token.sub = (user as CustomUser).id;
-      }
-      return token;
     },
   },
 };

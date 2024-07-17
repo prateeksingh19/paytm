@@ -1,17 +1,23 @@
-// In app/api/user/route.ts
-import prisma from "@/db";
+import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
+import { authOptions } from "../../lib/auth";
 
 export const GET = async () => {
-  await prisma.user.create({
-    data: {
-      email: "asd11",
-      name: "adsads",
-      password: "123",
-      number: 12311,
-    },
-  });
-  return NextResponse.json({
-    message: "hi there",
-  });
+  try {
+    const session = await getServerSession(authOptions);
+    if (session && session.user) {
+      return NextResponse.json({
+        user: session.user,
+      });
+    }
+  } catch (e) {
+    return NextResponse.json(
+      {
+        message: "You are not logged in",
+      },
+      {
+        status: 403,
+      }
+    );
+  }
 };

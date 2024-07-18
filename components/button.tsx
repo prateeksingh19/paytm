@@ -10,7 +10,12 @@ interface ButtonProps {
 export const Button = ({ onClick, children }: ButtonProps) => {
   return (
     <button
-      onClick={onClick}     
+      onClick={onClick}
+
+
+
+
+
 
 
       

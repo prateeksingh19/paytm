@@ -9,7 +9,7 @@ export default async function createOnRampTransaction(
 ) {
   const session = await getServerSession(authOptions);
   const userId = session.user?.id;
-  const token = Math.random().toString(); // generate proper token
+  const token = Math.floor(100000 + Math.random() * 900000).toString(); // generate proper token
   if (!session?.user || !session.user?.id) {
     return {
       message: "Unauthenticated request",

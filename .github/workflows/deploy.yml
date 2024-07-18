@@ -51,6 +51,7 @@ jobs:
 
             # Run Docker container with secrets passed as environment variables
             sudo docker run -d --name paytm \
+              -e NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }} \
               -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
               -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
               -e GOOGLE_CLIENT_ID="${{ secrets.GOOGLE_CLIENT_ID }}" \

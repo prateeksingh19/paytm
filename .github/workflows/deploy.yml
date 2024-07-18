@@ -36,24 +36,20 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            # Load secrets into environment variables on EC2
-            export DATABASE_URL="${{ secrets.DATABASE_URL }}"
-            export JWT_SECRET="${{ secrets.JWT_SECRET }}"
-            export GOOGLE_CLIENT_ID="${{ secrets.GOOGLE_CLIENT_ID }}"
-            export GOOGLE_CLIENT_SECRET="${{ secrets.GOOGLE_CLIENT_SECRET }}"
+            set -e
 
             # Pull latest Docker image
             sudo docker pull prateekv19/paytm:latest
 
             # Stop and remove existing container if running
-            sudo docker stop paytm || true
-            sudo docker rm paytm || true
+            sudo docker stop web-app || true
+            sudo docker rm web-app || true
 
             # Run Docker container with secrets passed as environment variables
-            sudo docker run -d --name paytm \
-              -e DATABASE_URL="${DATABASE_URL}" \
-              -e JWT_SECRET="${JWT_SECRET}" \
-              -e GOOGLE_CLIENT_ID="${GOOGLE_CLIENT_ID}" \
-              -e GOOGLE_CLIENT_SECRET="${GOOGLE_CLIENT_SECRET}" \
+            sudo docker run -d --name web-app \
+              -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
+              -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
+              -e GOOGLE_CLIENT_ID="${{ secrets.GOOGLE_CLIENT_ID }}" \
+              -e GOOGLE_CLIENT_SECRET="${{ secrets.GOOGLE_CLIENT_SECRET }}" \
               -p 3005:3000 \
               prateekv19/paytm:latest

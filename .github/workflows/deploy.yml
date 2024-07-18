@@ -42,11 +42,11 @@ jobs:
             sudo docker pull prateekv19/paytm:latest
 
             # Stop and remove existing container if running
-            sudo docker stop web-app || true
-            sudo docker rm web-app || true
+            sudo docker stop paytm || true
+            sudo docker rm paytm || true
 
             # Run Docker container with secrets passed as environment variables
-            sudo docker run -d --name web-app \
+            sudo docker run -d --name paytm \
               -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
               -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
               -e GOOGLE_CLIENT_ID="${{ secrets.GOOGLE_CLIENT_ID }}" \

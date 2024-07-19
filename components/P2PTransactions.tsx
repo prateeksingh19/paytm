@@ -16,11 +16,12 @@ export const P2PTransactions = ({
       </Card>
     );
   }
+
   return (
     <Card title="Recent Transactions">
       <div className="pt-2">
-        {transactions.map((t) => (
-          <div className="flex justify-between pt-2">
+        {transactions.map((t, index) => (
+          <div key={index} className="flex justify-between pt-2">
             <div>
               <div className="text-sm">{`Send INR to ${t.to}`}</div>
               <div className="text-slate-600 text-xs">

@@ -36,7 +36,7 @@ async function getP2PTransactions() {
   }));
 }
 
-export default async function () {
+export default async function P2PPage() {
   const balance = await getBalance();
   const transactions = await getP2PTransactions();
   return (

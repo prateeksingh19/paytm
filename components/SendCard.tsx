@@ -4,10 +4,13 @@ import createP2PTransactions from "../app/lib/actions/createP2PTxns";
 import { Button } from "./button";
 import { Card } from "./card";
 import { TextInput } from "./textinput";
+import { useRouter } from "next/navigation";
 
 export function SendCard() {
+  const router = useRouter();
   const [number, setNumber] = useState(0);
   const [amount, setAmount] = useState(0);
+
   return (
     <div className="h-[90vh]">
       <Card title="Send">
@@ -30,7 +33,7 @@ export function SendCard() {
             <Button
               onClick={async () => {
                 await createP2PTransactions(amount * 100, number);
-                alert("Hi");
+                router.refresh();
               }}
             >
               Send

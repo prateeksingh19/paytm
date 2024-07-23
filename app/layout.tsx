@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { AppbarClient } from "../components/AppbarClient";
 import { Providers } from "./providers";
+import { useRouter } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Wallet",

@@ -29,6 +29,16 @@ export default async function createOnRampTransaction(
       },
     });
   }
+  await prisma.balance.update({
+    where: {
+      userId: Number(userId),
+    },
+    data: {
+      locked: {
+        increment: amount,
+      },
+    },
+  });
   await prisma.onRampTransaction.create({
     data: {
       provider,

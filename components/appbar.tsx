@@ -14,7 +14,14 @@ export const Appbar = ({ user, onSignin, onSignout }: AppbarProps) => {
   const pathname = usePathname();
   return (
     <div className="flex justify-between border-b px-4">
-      <div className="text-lg flex flex-col justify-center">PayTM</div>
+      <div
+        className="text-lg flex flex-col justify-center hover:cursor-pointer"
+        onClick={() => {
+          router.push("/dashboard");
+        }}
+      >
+        PayTM
+      </div>
       <div className="flex justify-center pt-2">
         {pathname == "/check" ? (
           <Button

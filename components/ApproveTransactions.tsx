@@ -33,7 +33,7 @@ export default function ApproveTransactions({
       });
       if (res.status === 200) {
         alert(
-          `Transaction with Token: ${token} of Amount: ${
+          `Transaction with Token ${token} of Amount ${
             amount / 100
           } completed successfully`
         );
@@ -51,16 +51,16 @@ export default function ApproveTransactions({
     }
   }
 
-  async function cancelTxns(token: string, amount: number) {
+  async function cancelTxns(token: string, amount: number, userId: number) {
     try {
       const res = await axios.delete("/bank", {
-        data: { token },
+        data: { token, amount, userId },
       });
       if (res && res.status === 200) {
         alert(
-          `Transaction with Token: ${token} of Amount: ${
+          `Transaction with Token ${token} of Amount ${
             amount / 100
-          } completed successfully`
+          } declined successfully`
         );
         router.refresh();
       }
@@ -106,7 +106,7 @@ export default function ApproveTransactions({
               <div className="m-2">
                 <button
                   onClick={() => {
-                    cancelTxns(t.token, t.amount);
+                    cancelTxns(t.token, t.amount, t.userId);
                   }}
                 >
                   Cancel

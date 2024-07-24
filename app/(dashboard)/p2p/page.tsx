@@ -24,6 +24,9 @@ async function getP2PTransactions() {
     where: {
       fromUserId: Number(session?.user?.id),
     },
+    orderBy: {
+      timestamp: "desc",
+    },
     include: {
       toUser: true,
     },

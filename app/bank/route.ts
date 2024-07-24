@@ -36,6 +36,9 @@ export const POST = async (req: Request) => {
             amount: {
               increment: Number(amount),
             },
+            locked: {
+              decrement: Number(amount),
+            },
           },
         }),
       ]);

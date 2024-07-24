@@ -26,14 +26,16 @@ export default function ApproveTransactions({
   }
   async function approveTxns(userId: number, amount: number, token: string) {
     try {
-      const res = await axios.post("http://localhost:3000/bank", {
+      const res = await axios.post("/bank", {
         userId,
         token,
         amount,
       });
       if (res.status === 200) {
         alert(
-          `Transaction with ${token} of ${amount / 100} completed successfully`
+          `Transaction with Token: ${token} of Amount: ${
+            amount / 100
+          } completed successfully`
         );
         router.refresh();
       }
@@ -51,12 +53,14 @@ export default function ApproveTransactions({
 
   async function cancelTxns(token: string, amount: number) {
     try {
-      const res = await axios.delete("http://localhost:3000/bank", {
+      const res = await axios.delete("/bank", {
         data: { token },
       });
       if (res && res.status === 200) {
         alert(
-          `Transaction with ${token} of ${amount / 100} cancelled successfully`
+          `Transaction with Token: ${token} of Amount: ${
+            amount / 100
+          } completed successfully`
         );
         router.refresh();
       }

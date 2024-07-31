@@ -8,8 +8,18 @@ import { useRouter } from "next/navigation";
 
 export function SendCard() {
   const router = useRouter();
-  const [number, setNumber] = useState(0);
-  const [amount, setAmount] = useState(0);
+  const [number, setNumber] = useState<number>(0);
+  const [amount, setAmount] = useState<number>(0);
+
+  const handleNumberChange = (value: string) => {
+    const numericValue = parseInt(value);
+    setNumber(isNaN(numericValue) ? 0 : numericValue);
+  };
+
+  const handleAmountChange = (value: string) => {
+    const numericValue = parseInt(value);
+    setAmount(isNaN(numericValue) ? 0 : numericValue);
+  };
 
   return (
     <div className="h-[90vh]">
@@ -18,16 +28,12 @@ export function SendCard() {
           <TextInput
             label="Number"
             placeholder=""
-            onChange={(value) => {
-              setNumber(value);
-            }}
+            onChange={handleNumberChange}
           />
           <TextInput
             label="Amount"
             placeholder=""
-            onChange={(value) => {
-              setAmount(value);
-            }}
+            onChange={handleAmountChange}
           />
           <div className="pt-4 flex justify-center">
             <Button

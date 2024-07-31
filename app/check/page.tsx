@@ -11,6 +11,9 @@ async function getTransactions() {
       userId: Number(userId),
       status: "Processing",
     },
+    orderBy: {
+      startTime: "desc",
+    },
   });
   return txns.map((t) => ({
     key: t.id,

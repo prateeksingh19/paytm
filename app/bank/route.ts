@@ -36,6 +36,9 @@ export const POST = async (req: Request) => {
             amount: {
               increment: Number(amount),
             },
+            locked: {
+              decrement: Number(amount),
+            },
           },
         }),
       ]);
@@ -72,7 +75,7 @@ export const POST = async (req: Request) => {
 };
 
 export const DELETE = async (req: Request) => {
-  const { token } = await req.json();
+  const { token, userId, amount } = await req.json();
 
   try {
     const transaction = await prisma.onRampTransaction.findFirst({
@@ -84,6 +87,16 @@ export const DELETE = async (req: Request) => {
 
     if (transaction) {
       await prisma.$transaction([
+        prisma.balance.updateMany({
+          where: {
+            userId: Number(userId),
+          },
+          data: {
+            locked: {
+              decrement: Number(amount),
+            },
+          },
+        }),
         prisma.onRampTransaction.update({
           where: {
             id: transaction.id,

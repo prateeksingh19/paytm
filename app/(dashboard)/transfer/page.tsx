@@ -7,9 +7,13 @@ import prisma from "@/index";
 
 async function getBalance() {
   const session = await getServerSession(authOptions);
+  const userId = session?.user?.id ? Number(session.user.id) : null;
+  if (!userId) {
+    return [];
+  }
   const balance = await prisma.balance.findFirst({
     where: {
-      userId: Number(session?.user?.id),
+      userId: userId,
     },
   });
   return {
@@ -20,9 +24,13 @@ async function getBalance() {
 
 async function getOnRampTransactions() {
   const session = await getServerSession(authOptions);
+  const userId = session?.user?.id ? Number(session.user.id) : null;
+  if (!userId) {
+    return [];
+  }
   const txns = await prisma.onRampTransaction.findMany({
     where: {
-      userId: Number(session?.user?.id),
+      userId: userId,
     },
     orderBy: {
       startTime: "desc",

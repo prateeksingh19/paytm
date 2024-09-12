@@ -27,7 +27,7 @@ async function getTransactions() {
 }
 export default async function Check() {
   const session = await getServerSession(authOptions);
-  const userId = session.user?.id;
+  const userId = session?.user?.id;
   if (!session?.user || !userId) {
     return {
       message: "Unauthenticated request",
